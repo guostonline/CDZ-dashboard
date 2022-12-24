@@ -1,6 +1,6 @@
 import pandas as pd
 import streamlit as st
-import SheetFix
+from SheetFix import *
 from convert_df_image import *
 from vendeur_phones import *
 
