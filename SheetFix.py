@@ -34,6 +34,7 @@ class SheetFix:
             sheet_ranges.unmerge_cells("K8:O8")
             sheet_ranges.delete_cols(1,2)
             sheet_ranges.delete_rows(1,8)
+            sheet_ranges.delete_rows(2,28)
             sheet_ranges.delete_cols(7,6)
             sheet_ranges.delete_cols(7,2)
             sheet_ranges.delete_cols(3,1)

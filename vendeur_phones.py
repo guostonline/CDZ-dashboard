@@ -1,6 +1,6 @@
 
 
-vendeur_number_phone={
+vendeur_number_phone_bk={
     
     'K92 DARKAOUI MOHAMED':"+212 663-835181",
     'K91 BAIZ MOHAMED':"+212 626-508898",
@@ -19,7 +19,7 @@ vendeur_number_phone={
     '485 NAMOUSS ABDESSAMAD':'+212 664-782591',
     'T45 FAICAL GOUIZID':'+212 641-894845'
 }
-vendeur_number_phone_bk={
+vendeur_number_phone={
     
    
     'CHAKIB ELFIL':'+212669994101',

@@ -94,3 +94,87 @@ Phone Number: +212 668-399702
 Image: images/Y59 EL GHANMI MOHAMED.jpg
 Caption: 23/12/2022
 --------------------
+Date: 26/12/2022
+Time: 12:1
+Phone Number: +212 663-835181
+Image: images/K92 DARKAOUI MOHAMED.jpg
+Caption: 26/12/2022
+--------------------
+Date: 26/12/2022
+Time: 12:1
+Phone Number: +212 699-363894
+Image: images/D86 ACHAOUI AZIZ.jpg
+Caption: 26/12/2022
+--------------------
+Date: 26/12/2022
+Time: 12:1
+Phone Number: +212 626-508898
+Image: images/K91 BAIZ MOHAMED.jpg
+Caption: 26/12/2022
+--------------------
+Date: 26/12/2022
+Time: 12:1
+Phone Number: +212 677-529149
+Image: images/F78 GHOUSMI MOURAD.jpg
+Caption: 26/12/2022
+--------------------
+Date: 26/12/2022
+Time: 12:1
+Phone Number: +212771041122
+Image: images/K81 AISSI SAMIR.jpg
+Caption: 26/12/2022
+--------------------
+Date: 26/12/2022
+Time: 12:2
+Phone Number: +212669994101
+Image: images/T89 AKNOUN MOHAMED.jpg
+Caption: 26/12/2022
+--------------------
+Date: 26/12/2022
+Time: 12:2
+Phone Number: +212 654-076929
+Image: images/D48 IBACH MOHAMED.jpg
+Caption: 26/12/2022
+--------------------
+Date: 26/12/2022
+Time: 12:2
+Phone Number: +212 707-744529
+Image: images/K60 ELHAOUZI RACHID.jpg
+Caption: 26/12/2022
+--------------------
+Date: 26/12/2022
+Time: 12:14
+Phone Number: +212669994101
+Image: images/CHAKIB ELFIL.jpg
+Caption: 26/12/2022
+--------------------
+Date: 26/12/2022
+Time: 12:21
+Phone Number: +212669994101
+Image: images/CHAKIB ELFIL.jpg
+Caption: 26/12/2022
+--------------------
+Date: 26/12/2022
+Time: 12:23
+Phone Number: +212669994101
+Image: images/CHAKIB ELFIL.jpg
+Caption: 26/12/2022
+--------------------
+Date: 26/12/2022
+Time: 12:34
+Phone Number: +212669994101
+Image: images/CHAKIB ELFIL.jpg
+Caption: 26/12/2022
+--------------------
+Date: 26/12/2022
+Time: 12:49
+Phone Number: +212669994101
+Image: images/CHAKIB ELFIL.jpg
+Caption: 26/12/2022
+--------------------
+Date: 26/12/2022
+Time: 13:1
+Phone Number: +212669994101
+Image: images/CHAKIB ELFIL.jpg
+Caption: 26/12/2022
+--------------------
