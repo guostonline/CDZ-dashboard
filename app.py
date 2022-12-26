@@ -1,6 +1,5 @@
 import pandas as pd
 import openpyxl
-import dataframe_image
 import streamlit as st
 from SheetFix import *
 from convert_df_image import *
