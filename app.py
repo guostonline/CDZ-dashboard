@@ -5,6 +5,7 @@ import plotly.express as px
 from SheetFix import *
 from convert_df_image import *
 from vendeur_phones import *
+from operator import itemgetter
 
 
 st.set_page_config(page_title="Rapport FDV",
@@ -34,21 +35,43 @@ df = pd.read_excel(
     sheet_name=["AGADIR"],
 
 )
-
+som_check = True
+vmm_check = False
 df = df.get("AGADIR")
 list_vendeurs = []
+col1,col2=st.sidebar.columns(2)
+with col1:
+    som_vendeurs = st.checkbox("SOM Vendeurs", value=False)
+with col2:
+    vmm_vendeurs = st.checkbox("VMM Vendeurs", value=False)
+vmm_vendeurs_list=['K91 BAIZ MOHAMED','K81 AISSI SAMIR','035 AKANTOR REDOUAN','Y60 ATOUAOU AIMAD','F77 EL MEZRAOUI YOUSSEF','T45 FAICAL GOUIZID']    
+som_vendeurs_list=['K92 DARKAOUI MOHAMED','F78 GHOUSMI MOURAD','D86 ACHAOUI AZIZ','D45 OUARSSASSA YASSINE','Y59 EL GHANMI MOHAMED','T45 FAICAL GOUIZID']
 vendeurs = st.sidebar.multiselect(
     'Vendeurs', df["Vendeur"].unique(),
-    default="K92 DARKAOUI MOHAMED"
+    default=som_vendeurs_list if som_vendeurs else ( vmm_vendeurs_list if vmm_vendeurs else "K92 DARKAOUI MOHAMED")
 )
-famille = st.sidebar.multiselect(
-    "Famille:",
-    options=df["Famille"].unique(),
-    default=df["Famille"][6]
-)
+som_vmm=st.sidebar.selectbox("Choisir la famille",["SOM et VMM","SOM","VMM"])
 
-som_check = st.sidebar.checkbox("SOM", value=False)
-vmm_check = st.sidebar.checkbox("VMM", value=False)
+famille = "C.A (ht)"
+if som_vmm=="SOM":
+    famille = st.sidebar.multiselect(
+        "Famille:",
+        options=df["Famille"].unique(),
+        default=[df["Famille"][index] for index in [0, 1, 2, 6]]
+    )
+elif som_vmm=="VMM":
+    famille = st.sidebar.multiselect(
+        "Famille:",
+        options=df["Famille"].unique(),
+        default=df["Famille"][3:7]
+    )
+else :
+    famille = st.sidebar.multiselect(
+        "Famille:",
+        options=df["Famille"].unique(),
+        default=df["Famille"][0:7]
+    )    
+
 
 all_vendeur_option = st.sidebar.checkbox("All_Vendeur", value=False)
 df["Obj TTC"] = df.apply(lambda x: x["OBJ"] * 24*1.2/day_work, axis=1)
@@ -87,42 +110,12 @@ df = df.astype({
             "Percent": "int",
 
 })
-#df['Pourcent'] = df['Pourcent'].str.rstrip('%').astype('float') / 100.0
 
-# df=df.style.format({"Percent":"{:.0%}"})
-levure_ca = (
-    df_levure.groupby(by=["Famille"]).sum()[
-        ["REAL", "OBJ"]].sort_values(by="REAL")
-)
-flan_ca = (
-    df_flan.groupby(by=["Famille"]).sum()[
-        ["REAL", "OBJ"]].sort_values(by="REAL")
-)
-buillon_ca = (
-    df_bouillon.groupby(by=["Famille"]).sum()[
-        ["REAL", "OBJ"]].sort_values(by="REAL")
-)
-
-condiment_ca = (
-    df_condiment.groupby(by=["Famille"]).sum()[
-        ["REAL", "OBJ"]].sort_values(by="REAL")
-)
-confiture_ca = (
-    df_confiture.groupby(by=["Famille"]).sum()[
-        ["REAL", "OBJ"]].sort_values(by="REAL")
-)
-conserve_ca = (
-    df_conserve.groupby(by=["Famille"]).sum()[
-        ["REAL", "OBJ"]].sort_values(by="REAL")
-)
-
+st.dataframe(df)
 vendeur_ca = (
     df.groupby(by=["Vendeur"]).sum()[["REAL", "OBJ"]].sort_values(by="REAL")
 )
-
-
-st.dataframe(df)
-fig_produit_sales = px.bar(
+ca_vendeur = px.bar(
     vendeur_ca,
     x="REAL",
     y=vendeur_ca.index,
@@ -130,56 +123,95 @@ fig_produit_sales = px.bar(
     title=f'{famille[0]}',
     color_discrete_sequence=["#0083B8"] * len(vendeur_ca),
     template="plotly_white",
-    color='REAL'
+    color='REAL',
+    height=300,
+    width=500
+    
 
 )
 # circle=px.pie(df,names=list_vendeurs,values="REAL")
+
 ca_by_vendeur = px.bar(vendeur_ca, y=vendeurs, x=[
-    "REAL", "OBJ"], title="CA", barmode='group')
+    "REAL", "OBJ"], title="CA", barmode='group',height=300,
+    width=500)
 
+try:
+    col1,col2=st.columns(2)
+    with col1:
+        st.plotly_chart(ca_vendeur)
+    with col2:
+        
+        st.plotly_chart(ca_by_vendeur)
+    
 
-if som_check:
-    ca_by_levure = px.bar(levure_ca, y=vendeurs, x=[
-        "REAL", "OBJ"], title="LEVURE", barmode='group', width=400, height=250)
-    ca_by_flan = px.bar(flan_ca, y=vendeurs, x=[
-                        "REAL", "OBJ"], title="FLAN", barmode='group', width=400, height=250)
-    ca_by_buillon = px.bar(df_bouillon, y=vendeurs, x=[
-                           "REAL", "OBJ"], title="BUILLON", barmode='group', width=400, height=250)
-ca_by_condiment = px.bar(condiment_ca, y=vendeurs, x=[
-                         "REAL", "OBJ"], title="CONDIMENT", barmode='group', width=400, height=250)
-
-
-ca_by_confiture = px.bar(confiture_ca, y=vendeurs, x=[
-                         "REAL", "OBJ"], title="CONFITURE", barmode='group', width=400, height=250)
-ca_by_conserve = px.bar(conserve_ca, y=vendeurs, x=[
-                        "REAL", "OBJ"], title="CONSERVE", barmode='group', width=400, height=250)
-
-
-st.plotly_chart(fig_produit_sales)
+except Exception as e :
+    print("an error " +e)
 # st.plotly_chart(circle)
 df = df.style.applymap(lambda x: "background-color: #ed8269" if x < -10 else ("background-color: #FDCDC3" if x <
-
                        0 else ("background-color: white" if x == 0 else "background-color: #A1EB0E")), subset=["Percent"])
-if som_check:
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.plotly_chart(ca_by_levure)
-    with col2:
-        st.plotly_chart(ca_by_flan)
-    with col3:
-        st.plotly_chart(ca_by_buillon)
-if vmm_check:
-    col1, col2, col3 = st.columns(3)
 
-    with col1:
-        st.plotly_chart(ca_by_condiment)
-    with col2:
-        st.plotly_chart(ca_by_confiture)
-    with col3:
-        st.plotly_chart(ca_by_conserve)
+ca_by_vendeur = px.bar(vendeur_ca, y=vendeurs, x=[
+    "REAL", "OBJ"], title="CA", barmode='group')
+try:
 
+    if som_vmm=="SOM" or som_vmm=="SOM et VMM":
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            levure_ca = (
+    df_levure.groupby(by=["Famille"]).sum()[
+        ["REAL", "OBJ"]].sort_values(by="REAL")
+)
+            ca_by_levure = px.bar(levure_ca, y=vendeurs, x=[
+                "REAL", "OBJ"], title="LEVURE", barmode='group', width=400, height=250)
+            st.plotly_chart(ca_by_levure)
+        with col2:
+            flan_ca = (
+    df_flan.groupby(by=["Famille"]).sum()[
+        ["REAL", "OBJ"]].sort_values(by="REAL")
+)
+            ca_by_flan = px.bar(flan_ca, y=vendeurs, x=[
+                "REAL", "OBJ"], title="FLAN", barmode='group', width=400, height=250)
+            st.plotly_chart(ca_by_flan)
+        with col3:
+            buillon_ca = (
+    df_bouillon.groupby(by=["Famille"]).sum()[
+        ["REAL", "OBJ"]].sort_values(by="REAL")
+)
+            ca_by_buillon = px.bar(df_bouillon, y=vendeurs, x=[
+                "REAL", "OBJ"], title="BUILLON", barmode='group', width=400, height=250)
+            st.plotly_chart(ca_by_buillon)
+    if som_vmm=="VMM" or som_vmm=="SOM et VMM":
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            condiment_ca = (
+    df_condiment.groupby(by=["Famille"]).sum()[
+        ["REAL", "OBJ"]].sort_values(by="REAL")
+)
+            ca_by_condiment = px.bar(condiment_ca, y=vendeurs, x=[
+                "REAL", "OBJ"], title="CONDIMENT", barmode='group', width=400, height=250)
+            st.plotly_chart(ca_by_condiment)
+        with col2:
+            confiture_ca = (
+    df_confiture.groupby(by=["Famille"]).sum()[
+        ["REAL", "OBJ"]].sort_values(by="REAL")
+)
+            ca_by_confiture = px.bar(confiture_ca, y=vendeurs, x=[
+                "REAL", "OBJ"], title="CONFITURE", barmode='group', width=400, height=250)
+            st.plotly_chart(ca_by_confiture)
+        with col3:
+            conserve_ca = (
+    df_conserve.groupby(by=["Famille"]).sum()[
+        ["REAL", "OBJ"]].sort_values(by="REAL")
+)
+            ca_by_conserve = px.bar(conserve_ca, y=vendeurs, x=[
+                "REAL", "OBJ"], title="CONSERVE", barmode='group', width=400, height=250)
+            st.plotly_chart(ca_by_conserve)
+except Exception as e:
+    print("an error " + e )
 
 # whatsapp_data=whatsapp_data.data
+
 
 def send_image():
     for vendeur in vendeurs:
@@ -193,12 +225,14 @@ def send_image():
             "EnCours": "int",
             "Obj TTC": "int",
             "Rest TTC": "int",
+            "Percent": "int",
 
 
         })
-
+            
         nv_df = nv_df.style.applymap(lambda x: "background-color: #ed8269" if x < -10 else ("background-color: #FDCDC3" if x <
                                      0 else ("background-color: white" if x == 0 else "background-color: #A1EB0E")), subset=["Percent"])
+        
 
         send_image = SendImageToFDV(nv_df, vendeur)
         send_image.send_df_image()
