@@ -50,7 +50,7 @@ vendeurs = st.sidebar.multiselect(
     'Vendeurs', df["Vendeur"].unique(),
     default=som_vendeurs_list if som_vendeurs else ( vmm_vendeurs_list if vmm_vendeurs else "K92 DARKAOUI MOHAMED")
 )
-som_vmm=st.sidebar.selectbox("Choisir la famille",["SOM et VMM","SOM","VMM"])
+som_vmm=st.sidebar.selectbox("Choisir la famille",["SOM","VMM","SOM et VMM"])
 
 famille = "C.A (ht)"
 if som_vmm=="SOM":
@@ -120,7 +120,7 @@ ca_vendeur = px.bar(
     x="REAL",
     y=vendeur_ca.index,
     orientation="h",
-    title=f'{famille[0]}',
+    title=f'CA',
     color_discrete_sequence=["#0083B8"] * len(vendeur_ca),
     template="plotly_white",
     color='REAL',
@@ -132,7 +132,7 @@ ca_vendeur = px.bar(
 # circle=px.pie(df,names=list_vendeurs,values="REAL")
 
 ca_by_vendeur = px.bar(vendeur_ca, y=vendeurs, x=[
-    "REAL", "OBJ"], title="CA", barmode='group',height=300,
+    "REAL", "OBJ"], title="Real vs OBJ", barmode='group',height=300,
     width=500)
 
 try:
@@ -140,12 +140,11 @@ try:
     with col1:
         st.plotly_chart(ca_vendeur)
     with col2:
-        
         st.plotly_chart(ca_by_vendeur)
     
 
 except Exception as e :
-    print("an error " +e)
+    print("an error ")
 # st.plotly_chart(circle)
 df = df.style.applymap(lambda x: "background-color: #ed8269" if x < -10 else ("background-color: #FDCDC3" if x <
                        0 else ("background-color: white" if x == 0 else "background-color: #A1EB0E")), subset=["Percent"])
@@ -208,7 +207,7 @@ try:
                 "REAL", "OBJ"], title="CONSERVE", barmode='group', width=400, height=250)
             st.plotly_chart(ca_by_conserve)
 except Exception as e:
-    print("an error " + e )
+    print("an error "  )
 
 # whatsapp_data=whatsapp_data.data
 
@@ -218,22 +217,20 @@ def send_image():
 
         nv_df = whatsapp_data.query(f"Vendeur== '{vendeur}'")
 
-        #df["Percent"] = df.apply(lambda x:x["Percent"] /100, axis=1)
         nv_df = nv_df.astype({
             "REAL": "int",
             "OBJ": "int",
             "EnCours": "int",
             "Obj TTC": "int",
             "Rest TTC": "int",
-            "Percent": "int",
-
-
+       
         })
             
-        nv_df = nv_df.style.applymap(lambda x: "background-color: #ed8269" if x < -10 else ("background-color: #FDCDC3" if x <
-                                     0 else ("background-color: white" if x == 0 else "background-color: #A1EB0E")), subset=["Percent"])
         
-
+        nv_df["Percent"]= (nv_df["Percent"]/100).map('{:.0%}'.format)
+        #nv_df = nv_df.style.applymap(lambda x: "background-color: #ed8269" if x < -10 else ("background-color: #FDCDC3" if x <
+                                    # 0 else ("background-color: white" if x == 0 else "background-color: #A1EB0E")), subset=["Percent"])
+        
         send_image = SendImageToFDV(nv_df, vendeur)
         send_image.send_df_image()
 

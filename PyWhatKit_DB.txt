@@ -196,3 +196,9 @@ Phone Number: +212669994101
 Image: images/CHAKIB ELFIL.jpg
 Caption: 27/12/2022
 --------------------
+Date: 28/12/2022
+Time: 11:20
+Phone Number: +212669994101
+Image: images/CHAKIB ELFIL.jpg
+Caption: 28/12/2022
+--------------------
