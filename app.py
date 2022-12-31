@@ -6,6 +6,7 @@ from SheetFix import *
 from convert_df_image import *
 from vendeur_phones import *
 from operator import itemgetter
+from send_obj import *
 
 
 st.set_page_config(page_title="Rapport FDV",
@@ -38,14 +39,13 @@ df = pd.read_excel(
 som_check = True
 vmm_check = False
 df = df.get("AGADIR")
+
 list_vendeurs = []
 col1,col2=st.sidebar.columns(2)
 with col1:
     som_vendeurs = st.checkbox("SOM Vendeurs", value=False)
 with col2:
     vmm_vendeurs = st.checkbox("VMM Vendeurs", value=False)
-vmm_vendeurs_list=['K91 BAIZ MOHAMED','K81 AISSI SAMIR','035 AKANTOR REDOUAN','Y60 ATOUAOU AIMAD','F77 EL MEZRAOUI YOUSSEF','T45 FAICAL GOUIZID']    
-som_vendeurs_list=['K92 DARKAOUI MOHAMED','F78 GHOUSMI MOURAD','D86 ACHAOUI AZIZ','D45 OUARSSASSA YASSINE','Y59 EL GHANMI MOHAMED','T45 FAICAL GOUIZID']
 vendeurs = st.sidebar.multiselect(
     'Vendeurs', df["Vendeur"].unique(),
     default=som_vendeurs_list if som_vendeurs else ( vmm_vendeurs_list if vmm_vendeurs else "K92 DARKAOUI MOHAMED")
@@ -211,7 +211,17 @@ except Exception as e:
 
 # whatsapp_data=whatsapp_data.data
 
+upload_objectif_file = st.sidebar.file_uploader(
+    "Objectif file.", type="xlsx",)
 
+   
+def send_objectif_whatsapp():
+    if upload_objectif_file is not None:
+        objectif_sheet= SheetFix(upload_objectif_file)
+        excel_file= objectif_sheet.fix_sheet_objectif()
+        vendeurs_list=vmm_vendeurs_list+som_vendeurs_list+conventionnel_vendeurs_list
+        send_objectif_whatsapp=SendObjectif(excel_file,vendeurs_list)
+        send_objectif_whatsapp.prepare_file()
 def send_image():
     for vendeur in vendeurs:
 
@@ -234,9 +244,10 @@ def send_image():
         send_image = SendImageToFDV(nv_df, vendeur)
         send_image.send_df_image()
 
+col1,col2=st.sidebar.columns(2)
+with col1:
+    st.button("Send Whatsapp", on_click=send_image)
+with col2:
+    st.button("Send Obj", on_click=send_objectif_whatsapp)
 
-st.sidebar.button("Send df..", on_click=send_image)
 
-# if uploaded_file is not None:
-# sheet=SheetFix()
-# sheet.fix_the_sheet(uploaded_file)
