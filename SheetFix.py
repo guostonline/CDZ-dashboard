@@ -1,4 +1,6 @@
 from openpyxl import load_workbook
+
+
 class SheetFix:
     def __init__(self,file_name) :
         self._day_work=24
@@ -60,6 +62,21 @@ class SheetFix:
           
             wb.save("finale.xlsx")
             
-            print("Mod completed successfully")
     
         except Exception as e:print(e)
+    def fix_sheet_objectif(self):
+            wb=load_workbook(self.file_name)
+            sheet_ranges=wb["base"]
+            wb.active
+            try:
+                #sheet_ranges.delete_rows(0,1)
+                sheet_ranges["H2"]=str(sheet_ranges["H2"].value).strip()
+                sheet_ranges["I2"]=str(sheet_ranges["I2"].value).strip()
+                print("###############################################################")
+                
+                wb.save("objectif.xlsx")
+                return 'objectif.xlsx'
+                
+            except Exception as e:print(e)
+                
+            

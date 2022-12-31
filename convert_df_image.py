@@ -18,7 +18,7 @@ class SendImageToFDV:
         with st.spinner('Wait for it...'):
             time.sleep(5)
             st.success('Done!')
-        dfi.export(self.df,f"images/{self.fdv}.jpg")
+        dfi.export(self.df,f"images/{self.fdv}_obj.jpg")
         whatsapp.sendwhats_image(vendeur_number_phone[self.fdv],f"images/{self.fdv}.jpg",d1,10)
         st.spinner(text="In progress...")
         print("Image sent successfully")
